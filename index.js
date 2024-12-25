@@ -12,8 +12,14 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https:www.stockangel.online'],
+    credentials: true, // Allow cookies and credentials
+  };
+app.use(cors(corsOptions));
+  
+
 app.use(bodyParser.json());
 
 // Routes
