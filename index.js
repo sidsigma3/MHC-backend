@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 
 const corsOptions = {
+    methods: ['GET' ,'POST', 'OPTIONS'],
     origin: ['http://localhost:3000', 'https:www.stockangel.online'],
     credentials: true, // Allow cookies and credentials
   };
