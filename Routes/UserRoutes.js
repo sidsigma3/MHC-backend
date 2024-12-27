@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys} = require('../controllers/userController');
+const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys} = require('../Controllers/UserController');
 
 
 
