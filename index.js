@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { sequelize } = require('./Models');
-const userRoutes = require('./routes/userRoutes');
-const errorHandler = require('./middleware/ErorrHandler');
+const UserRoutes = require('./Routes/UserRoutes')
+const ErorrHandler = require('./MIddleware/ErorrHandler');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
 
@@ -19,16 +19,17 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   };
+
 app.use(cors(corsOptions));
   
 
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/api/users', UserRoutes);
 
 // Error Handling
-app.use(errorHandler);
+app.use(ErorrHandler);
 
 app.use(
     session({
