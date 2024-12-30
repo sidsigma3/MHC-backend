@@ -42,9 +42,9 @@ const createUser = async (req, res) => {
 
   const createNewUser = async (req, res) => {
     try {
-      const { first_name, last_name, email, password, role ,birthday ,jobProfile,nationality,phone,whatsapp } = req.body;
+      const { first_name, last_name, email, password, role ,birthday ,jobProfile,nationality,phone,whatsapp,city } = req.body;
 
-      const user = await User.create({ first_name, last_name, email, password, role,birthday,jobProfile,nationality,phone,whatsapp });
+      const user = await User.create({ first_name, last_name, email, password, role,birthday,jobProfile,nationality,phone,whatsapp,city });
       res.status(201).json(user);
     } catch (error) {
       res.status(500).json({ error: error.message });
