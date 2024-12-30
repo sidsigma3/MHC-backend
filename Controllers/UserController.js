@@ -2,6 +2,13 @@ const { User , Survey} = require('../Models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
+
+require('dotenv').config();
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const { OAuth2Client } = require('google-auth-library');
+
+
 // Create a new user
 // const createUser = async (req, res) => {
 //   try {
@@ -87,6 +94,47 @@ const createUser = async (req, res) => {
     }
   };
 
+
+
+  const googleLogin = async (req, res) => {
+    try {
+      const { token } = req.body;
+  
+      // Verify the token
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+  
+      const payload = ticket.getPayload();
+  
+      // Check if user exists or create a new user
+      let user = await User.findOne({ where: { email: payload.email } });
+      if (!user) {
+        user = await User.create({
+          email: payload.email,
+          first_name: payload.given_name,
+          last_name: payload.family_name,
+          password: payload.sub,
+          role: 'user', // Default role
+        });
+      }
+      
+      // Generate JWT
+      const jwtToken = jwt.sign(
+        { id: user.id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+  
+      res.status(200).json({ success: true, token: jwtToken });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Authentication failed' });
+    }
+  };
+  
+  
 
   const createSurvey = async (req, res) => {
     try {
@@ -207,4 +255,4 @@ const getSurveyById = async (req, res) => {
 
 
 
-module.exports = { createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser};
+module.exports = { createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
