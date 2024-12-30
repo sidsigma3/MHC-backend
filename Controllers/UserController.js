@@ -127,7 +127,17 @@ const createUser = async (req, res) => {
         { expiresIn: '1h' }
       );
   
-      res.status(200).json({ success: true, token: jwtToken });
+    
+      res.status(200).json({
+        success:true,
+        token:jwtToken,
+        id: user.userId,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        role: user.role,
+        token, // Include the token in the response
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: 'Authentication failed' });
