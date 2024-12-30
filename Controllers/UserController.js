@@ -39,6 +39,19 @@ const createUser = async (req, res) => {
   };
   
 
+
+  const createNewUser = async (req, res) => {
+    try {
+      const { first_name, last_name, email, password, role ,birthday ,jobProfile,nationality,phone,whatsapp } = req.body;
+
+      const user = await User.create({ first_name, last_name, email, password, role,birthday,jobProfile,nationality,phone,whatsapp });
+      res.status(201).json(user);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+
   const loginUser = async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -194,4 +207,4 @@ const getSurveyById = async (req, res) => {
 
 
 
-module.exports = { createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys};
+module.exports = { createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser};
