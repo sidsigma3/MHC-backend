@@ -2,11 +2,11 @@ const { User , Survey} = require('../Models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
-
+const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const { OAuth2Client } = require('google-auth-library');
+
 
 
 // Create a new user
@@ -134,7 +134,7 @@ const createUser = async (req, res) => {
     }
   };
   
-  
+
 
   const createSurvey = async (req, res) => {
     try {
