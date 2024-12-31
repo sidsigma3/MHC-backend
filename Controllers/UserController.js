@@ -285,4 +285,44 @@ const deleteUser = async (req, res) => {
 
 
 
-module.exports = {deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
+const sendRecoveryCode = async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) return res.status(400).json({ message: 'Email is required' });
+
+    try {
+        // Check if user exists
+        const user = await User.findOne({ where: { email } });
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        // Generate a random 6-digit code
+        const code = crypto.randomInt(100000, 999999).toString();
+
+        // Store the code temporarily
+        verificationCodes[email] = code;
+
+        // Send email using Nodemailer
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Password Reset Code',
+            text: `Your password reset code is ${code}`,
+        });
+
+        res.json({ message: 'Code sent successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error sending code' });
+    }
+}
+
+
+module.exports = {sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
