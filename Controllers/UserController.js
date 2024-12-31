@@ -338,11 +338,8 @@ try {
     if (verificationCodes[email] !== code)
         return res.status(400).json({ message: 'Invalid or expired code' });
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update user password
-    await User.update({ password: hashedPassword }, { where: { email } });
+    await User.update({ password: newPassword }, { where: { email } });
 
     // Remove the used code
     delete verificationCodes[email];
