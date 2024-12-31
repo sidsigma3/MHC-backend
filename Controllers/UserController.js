@@ -326,4 +326,32 @@ const sendRecoveryCode = async (req, res) => {
 }
 
 
-module.exports = {sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
+
+const resetPassword = async (req, res) => {
+const { email, code, newPassword } = req.body;
+
+if (!email || !code || !newPassword)
+    return res.status(400).json({ message: 'All fields are required' });
+
+try {
+    // Verify the code
+    if (verificationCodes[email] !== code)
+        return res.status(400).json({ message: 'Invalid or expired code' });
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user password
+    await User.update({ password: hashedPassword }, { where: { email } });
+
+    // Remove the used code
+    delete verificationCodes[email];
+
+    res.json({ message: 'Password reset successfully' });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error resetting password' });
+}
+};
+
+module.exports = {resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
