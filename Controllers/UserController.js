@@ -284,7 +284,7 @@ const deleteUser = async (req, res) => {
 };
 
 
-
+const verificationCodes = {};
 const sendRecoveryCode = async (req, res) => {
     const { email } = req.body;
 
