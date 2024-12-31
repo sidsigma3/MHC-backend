@@ -266,23 +266,22 @@ const getSurveyById = async (req, res) => {
 const deleteUser = async (req, res) => {
     const { id } = req.params;
     const { deleteSurveys } = req.body;
-  
+
     try {
-     
-      await User.findByIdAndDelete(id);
-  
-    
-      if (deleteSurveys) {
-        await Survey.deleteMany({ userId: id });
-      }
-  
-      res.status(200).json({ success: true, message: "User deleted successfully" });
+        // Delete user by ID
+        await User.destroy({ where: { userId: id } });
+
+        // Optionally delete associated surveys if deleteSurveys is true
+        if (deleteSurveys) {
+            await Survey.destroy({ where: { userId: id } });
+        }
+
+        res.status(200).json({ success: true, message: "User deleted successfully" });
     } catch (error) {
-      console.error("Error deleting user:", error);
-      res.status(500).json({ success: false, message: "Failed to delete user" });
+        console.error("Error deleting user:", error);
+        res.status(500).json({ success: false, message: "Failed to delete user" });
     }
-  };
-  
+};
 
 
 
