@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys, createNewUser,googleLogin} = require('../Controllers/UserController');
+const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys, createNewUser,googleLogin, deleteUser} = require('../Controllers/UserController');
 
 
 
@@ -17,6 +17,6 @@ router.put('/update/:userId', updateUserById);
 router.get('/survey/:userId',getSurveyById)
 router.get("/surveys/getAll", getAllSurveys);
 router.post('/auth/google', googleLogin);
-
+router.delete("/delete/:id", deleteUser);
 
 module.exports = router;

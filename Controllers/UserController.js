@@ -263,6 +263,27 @@ const getSurveyById = async (req, res) => {
     }
 };
 
+const deleteUser = async (req, res) => {
+    const { id } = req.params;
+    const { deleteSurveys } = req.body;
+  
+    try {
+     
+      await User.findByIdAndDelete(id);
+  
+    
+      if (deleteSurveys) {
+        await Survey.deleteMany({ userId: id });
+      }
+  
+      res.status(200).json({ success: true, message: "User deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ success: false, message: "Failed to delete user" });
+    }
+  };
+  
 
 
-module.exports = { createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
+
+module.exports = {deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
