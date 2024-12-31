@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const { OAuth2Client } = require('google-auth-library');
-require('dotenv').config();
+const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-
+require('dotenv').config();
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
@@ -292,17 +292,17 @@ const sendRecoveryCode = async (req, res) => {
     if (!email) return res.status(400).json({ message: 'Email is required' });
 
     try {
-        // Check if user exists
+     
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        // Generate a random 6-digit code
+       
         const code = crypto.randomInt(100000, 999999).toString();
 
-        // Store the code temporarily
+      
         verificationCodes[email] = code;
 
-        // Send email using Nodemailer
+       
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
