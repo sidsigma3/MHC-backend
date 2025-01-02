@@ -1,8 +1,17 @@
 const express = require('express');
 const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys, createNewUser,googleLogin, deleteUser, sendRecoveryCode, resetPassword, saveProfilePic} = require('../Controllers/UserController');
+const multer = require('multer');
 
-
-
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'uploads/profile_pictures'); // Store files in this directory
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${req.body.userId}-${Date.now()}-${file.originalname}`); // Unique file name
+    }
+  });
+  
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -20,6 +29,5 @@ router.post('/auth/google', googleLogin);
 router.delete("/delete/:id", deleteUser);
 router.post('/resetPassword',sendRecoveryCode)
 router.post('/resetPassword/enterPassword',resetPassword)
-router.post('/profilePicSave',saveProfilePic)
-
+router.post('/profilePicSave', upload.single('profilePicture'), saveProfilePic);
 module.exports = router;

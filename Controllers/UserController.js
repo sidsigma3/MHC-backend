@@ -5,7 +5,9 @@ const { Op } = require('sequelize');
 const { OAuth2Client } = require('google-auth-library');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+
 require('dotenv').config();
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
@@ -358,16 +360,26 @@ try {
 };
 
 
-const saveProfilePic =  async (req, res) => {
+const saveProfilePic = async (req, res) => {
   try {
-    const { userId, profilePicture } = req.body;
-    await User.update({ profilePicture }, { where: { userId } });
-    res.status(200).json({ message: 'Profile picture updated successfully' });
+    const { userId } = req.body;
+    const profilePicture = req.file; 
+
+    if (!profilePicture || !userId) {
+      return res.status(400).json({ error: 'Missing userId or profile picture.' });
+    }
+
+   
+    await User.update(
+      { profilePicture: profilePicture.filename }, 
+      { where: { userId } }
+    );
+
+    res.status(200).json({ message: 'Profile picture updated successfully', filePath: profilePicture.filename });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 
 module.exports = {saveProfilePic,resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
