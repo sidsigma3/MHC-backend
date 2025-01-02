@@ -1,18 +1,22 @@
 const express = require('express');
 const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys, createNewUser,googleLogin, deleteUser, sendRecoveryCode, resetPassword, saveProfilePic} = require('../Controllers/UserController');
 const multer = require('multer');
-
+const fs = require('fs');
+const path = require('path');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'Upload/'); 
+        const uploadsDir = path.join(__dirname, '../upload');
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        cb(null, uploadsDir);
     },
-    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`); 
+    filename: (req, file, cb) => { 
+        cb(null, `${Date.now()}-${file.originalname}`); 
     }
-  });
+});
 
-  
 const upload = multer({ storage });
 
 const router = express.Router();
