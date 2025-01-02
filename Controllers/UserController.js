@@ -115,9 +115,15 @@ const createUser = async (req, res) => {
         user = await User.create({
           email: payload.email,
           first_name: payload.given_name,
-          last_name: payload.family_name,
+          last_name: payload.family_name || '',
           password: payload.sub,
-          role: 'user', // Default role
+          role: 'user',
+          nationality:null,
+          phone:null,
+          city:null,
+          birthday:null,
+
+
         });
       }
       
