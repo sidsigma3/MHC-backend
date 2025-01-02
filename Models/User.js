@@ -17,7 +17,11 @@ const User = sequelize.define('User', {
       city: { type: DataTypes.STRING, allowNull: true },
       birthday: { type: DataTypes.DATE, allowNull: true },
       nationality: { type: DataTypes.STRING, allowNull: true },
-      jobProfile:{type:DataTypes.STRING , allowNull:true}
+      jobProfile:{type:DataTypes.STRING , allowNull:true},
+      profilePicture: {
+        type: DataTypes.BLOB('long'), 
+        allowNull: true,
+    },
 }, { timestamps: true });
 
 module.exports = User;

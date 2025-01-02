@@ -357,4 +357,17 @@ try {
 }
 };
 
-module.exports = {resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
+
+const saveProfilePic =  async (req, res) => {
+  try {
+    const { userId, profilePicture } = req.body;
+    await User.update({ profilePicture }, { where: { userId } });
+    res.status(200).json({ message: 'Profile picture updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+module.exports = {saveProfilePic,resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
