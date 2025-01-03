@@ -7,7 +7,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   dialectModule: require('mysql2'),
   socketPath: process.env.CC_MYSQL_PROXYSQL_SOCKET_PATH || null,
   pool: {
-    max: process.env.CC_MYSQL_PROXYSQL_MAX_CONNECTIONS || 10,
+    max: parseInt(process.env.CC_MYSQL_PROXYSQL_MAX_CONNECTIONS) || 10,
     min: 0,
     acquire: 30000,
     idle: 10000,
