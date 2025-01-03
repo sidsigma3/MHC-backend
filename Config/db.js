@@ -2,17 +2,17 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST,
   dialect: 'mysql',
   dialectModule: require('mysql2'),
-  dialectOptions: {
-    socketPath: process.env.CC_MYSQL_PROXYSQL_SOCKET_PATH,
-  },
+  socketPath: process.env.CC_MYSQL_PROXYSQL_SOCKET_PATH || null,
   pool: {
-    max: 50,
+    max: process.env.CC_MYSQL_PROXYSQL_MAX_CONNECTIONS || 10,
     min: 0,
     acquire: 30000,
     idle: 10000,
   },
+  ssl: process.env.CC_MYSQL_PROXYSQL_USE_TLS === 'true',
 });
 
 (async () => {
