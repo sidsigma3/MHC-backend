@@ -186,31 +186,32 @@ const createUser = async (req, res) => {
 
   const updateUserById = async (req, res) => {
     const { userId } = req.params;  // Extract userId from route parameters
-    const { first_name, last_name, email, phone, whatsapp, birthday, city, nationality, jobProfile,password } = req.body;
+    const { first_name, last_name, email, phone, whatsapp, birthday, city, nationality, jobProfile, password } = req.body;
     
     try {
-        const user = await User.findByPk(userId);  // Find user by userId
-        console.log(user)
+        const user = await User.findByPk(userId); 
+        console.log(user);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });  // Handle user not found case
         }
 
-       
-        const updatedUser = await user.update({
-            first_name,
-            last_name,
-            email,
-            phone,
-            whatsapp,
-            birthday,
-            city,
-            nationality,
-            jobProfile,
-            password
-        });
+        // Prepare the data object with only present fields
+        const updateFields = {};
 
+        if (first_name) updateFields.first_name = first_name;
+        if (last_name) updateFields.last_name = last_name;
+        if (email) updateFields.email = email;
+        if (phone) updateFields.phone = phone;
+        if (whatsapp) updateFields.whatsapp = whatsapp;
+        if (birthday) updateFields.birthday = birthday;
+        if (city) updateFields.city = city;
+        if (nationality) updateFields.nationality = nationality;
+        if (jobProfile) updateFields.jobProfile = jobProfile;
+        if (password) updateFields.password = password;
+
+        const updatedUser = await user.update(updateFields);  // Apply only the fields that were provided
         res.json(updatedUser);  
-        } catch (error) {
+    } catch (error) {
         console.error("Error updating user:", error);
         res.status(500).json({ error: 'Server error' });  // Handle server errors
     }
