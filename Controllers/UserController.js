@@ -185,17 +185,17 @@ const createUser = async (req, res) => {
   
 
   const updateUserById = async (req, res) => {
-    const { userId } = req.params;  // Extract userId from route parameters
+    const { userId } = req.params;  
     const { first_name, last_name, email, phone, whatsapp, birthday, city, nationality, jobProfile, password } = req.body;
     
     try {
         const user = await User.findByPk(userId); 
         console.log(user);
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });  // Handle user not found case
+            return res.status(404).json({ error: 'User not found' }); 
         }
 
-        // Prepare the data object with only present fields
+       
         const updateFields = {};
 
         if (first_name) updateFields.first_name = first_name;
@@ -209,11 +209,11 @@ const createUser = async (req, res) => {
         if (jobProfile) updateFields.jobProfile = jobProfile;
         if (password) updateFields.password = password;
 
-        const updatedUser = await user.update(updateFields);  // Apply only the fields that were provided
+        const updatedUser = await user.update(updateFields);  
         res.json(updatedUser);  
     } catch (error) {
         console.error("Error updating user:", error);
-        res.status(500).json({ error: 'Server error' });  // Handle server errors
+        res.status(500).json({ error: 'Server error' });  
     }
 };
 
@@ -237,7 +237,7 @@ const getSurveyById = async (req, res) => {
       const surveys = await Survey.findAll({ where: query });
   
       if (!surveys.length) {
-        return res.status(404).json({ message: "No surveys found for the given criteria" });
+        return res.status(200).json({ message: "No surveys found for the given criteria" });
       }
   
       res.status(200).json(surveys);
