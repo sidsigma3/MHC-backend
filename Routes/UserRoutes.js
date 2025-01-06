@@ -35,5 +35,5 @@ router.post('/auth/google', googleLogin);
 router.delete("/delete/:id", deleteUser);
 router.post('/resetPassword',sendRecoveryCode)
 router.post('/resetPassword/enterPassword',resetPassword)
-router.post('/profilePicSave', upload.single('profilePicture'), saveProfilePic);
+router.post('/profilePicSave',saveProfilePic);
 module.exports = router;

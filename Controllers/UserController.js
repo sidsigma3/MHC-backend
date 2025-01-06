@@ -363,24 +363,30 @@ try {
 
 const saveProfilePic = async (req, res) => {
   try {
-    const { userId } = req.body;
-    const profilePicture = req.file; 
+    const { userId, base64Image } = req.body;
 
-    if (!profilePicture || !userId) {
-      return res.status(400).json({ error: 'Missing userId or profile picture.' });
+    if (!userId || !base64Image) {
+        return res.status(400).json({ message: "User ID and base64 image are required." });
     }
 
-   
+
+    const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, ""); // Remove Base64 metadata
+    const imageBuffer = Buffer.from(base64Data, "base64"); // Decode Base64 to binary
+
     await User.update(
-      { profilePicture: profilePicture.filename }, 
-      { where: { userId } }
+        { profilePicture: imageBuffer },
+        { where: { userId } }
     );
 
-    res.status(200).json({ message: 'Profile picture updated successfully', filePath: profilePicture.filename });
-  } catch (error) {
+    res.status(200).json({ message: "Profile picture updated successfully." });
+} catch (error) {
     res.status(500).json({ error: error.message });
-  }
+}
 };
+
+
+
+
 
 
 module.exports = {saveProfilePic,resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
