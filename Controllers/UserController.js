@@ -263,7 +263,7 @@ const getSurveyById = async (req, res) => {
         const surveys = await Survey.findAll({ where: query });
 
         if (!surveys.length) {
-            return res.status(404).json({ message: "No surveys found for the given criteria" });
+            return res.status(200).json({ message: "No surveys found for the given criteria" });
         }
 
         res.status(200).json(surveys);
