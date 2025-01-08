@@ -86,7 +86,7 @@ const createUser = async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,        // Prevent JavaScript access
         secure: process.env.NODE_ENV === "production", // Use HTTPS in production
-        sameSite: "strict",    // Prevent cross-site request forgery (CSRF) attacks
+        sameSite: "none",    // Prevent cross-site request forgery (CSRF) attacks
         maxAge: 1 * 60 * 60 * 1000, // 1 hour
       });
       
@@ -145,7 +145,7 @@ const createUser = async (req, res) => {
       );
 
 
-      res.cookie("token", token, {
+      res.cookie("token", jwtToken, {
         httpOnly: true,        // Prevent JavaScript access
         secure: process.env.NODE_ENV === "production", // Use HTTPS in production
         sameSite: "strict",    // Prevent cross-site request forgery (CSRF) attacks
