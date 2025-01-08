@@ -3,6 +3,8 @@ const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserBy
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const authMiddleware = require('../MIddleware/AuthMiddleWare')
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -22,19 +24,21 @@ const upload = multer({ storage });
 const router = express.Router();
 
 // User Routes
-router.post('/create', createUser);
-router.post('/createNewUser', createNewUser);
-router.get('/getAll', getUsers);
-router.post('/login', loginUser);
-router.post('/survey/create',createSurvey)
-router.get("/:userId", getUserById); 
-router.put('/update/:userId', updateUserById);
-router.get('/survey/:userId',getSurveyById)
-router.get("/surveys/getAll", getAllSurveys);
-router.post('/auth/google', googleLogin);
-router.delete("/delete/:id", deleteUser);
-router.post('/resetPassword',sendRecoveryCode)
-router.post('/resetPassword/enterPassword',resetPassword)
-router.post('/profilePicSave',saveProfilePic);
-router.post('/logoutUser',logoutUser);
+router.post('/create', createUser); // Public route
+router.post('/createNewUser', createNewUser); // Public route
+router.post('/login', loginUser); // Public route
+router.post('/auth/google', googleLogin); // Public route
+router.post('/resetPassword', sendRecoveryCode); // Public route
+router.post('/resetPassword/enterPassword', resetPassword); // Public route
+
+// Protected Routes (Require Authentication Middleware)
+router.get('/getAll', authMiddleware, getUsers); // Requires auth
+router.post('/survey/create', authMiddleware, createSurvey); // Requires auth
+router.get("/:userId", authMiddleware, getUserById); // Requires auth
+router.put('/update/:userId', authMiddleware, updateUserById); // Requires auth
+router.get('/survey/:userId', authMiddleware, getSurveyById); // Requires auth
+router.get("/surveys/getAll", authMiddleware, getAllSurveys); // Requires auth
+router.delete("/delete/:id", authMiddleware, deleteUser); // Requires auth
+router.post('/profilePicSave', authMiddleware, upload.single('profilePic'), saveProfilePic); // Requires auth
+router.post('/logoutUser', authMiddleware, logoutUser); // Requires auth
 module.exports = router;

@@ -7,7 +7,7 @@ const ErorrHandler = require('./MIddleware/ErorrHandler');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
 const cookieParser = require("cookie-parser");
-const authMiddleware = require('./MIddleware/AuthMiddleWare')
+
 
 require('dotenv').config();
 
@@ -40,7 +40,7 @@ app.use(
 );
 
 // Authentication middleware (applied to all routes after sessions)
-app.use(authMiddleware);
+
 
 // Routes
 app.use('/api/users', UserRoutes);
