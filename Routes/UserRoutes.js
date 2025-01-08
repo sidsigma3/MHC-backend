@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys, createNewUser,googleLogin, deleteUser, sendRecoveryCode, resetPassword, saveProfilePic} = require('../Controllers/UserController');
+const { createUser, getUsers , loginUser ,createSurvey,getUserById ,updateUserById ,getSurveyById,getAllSurveys, createNewUser,googleLogin, deleteUser, sendRecoveryCode, resetPassword, saveProfilePic, logoutUser} = require('../Controllers/UserController');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
@@ -36,4 +36,5 @@ router.delete("/delete/:id", deleteUser);
 router.post('/resetPassword',sendRecoveryCode)
 router.post('/resetPassword/enterPassword',resetPassword)
 router.post('/profilePicSave',saveProfilePic);
+router.post('/logoutUser',logoutUser);
 module.exports = router;

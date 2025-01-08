@@ -6,6 +6,8 @@ const UserRoutes = require('./Routes/UserRoutes')
 const ErorrHandler = require('./MIddleware/ErorrHandler');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
+const cookieParser = require("cookie-parser");
+const authMiddleware = require('./MIddleware/AuthMiddleWare')
 
 require('dotenv').config();
 
@@ -22,8 +24,23 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
   
-
+app.use(cookieParser());
 app.use(bodyParser.json());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+      secure: true, // Set to `true` in production when using HTTPS
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    },
+  })
+);
+
+// Authentication middleware (applied to all routes after sessions)
+app.use(authMiddleware);
 
 // Routes
 app.use('/api/users', UserRoutes);
@@ -31,14 +48,6 @@ app.use('/api/users', UserRoutes);
 // Error Handling
 app.use(ErorrHandler);
 
-app.use(
-    session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      cookie: { secure: false }, 
-    })
-  );
 
 // Sync Database
 sequelize.sync({ force: false }).then(() => {

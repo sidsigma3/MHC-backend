@@ -22,6 +22,10 @@ const User = sequelize.define('User', {
         type: DataTypes.BLOB('long'), 
         allowNull: true,
     },
+    profilePictureFormat: {
+      type: DataTypes.STRING, 
+      allowNull: true,
+    },
 }, { timestamps: true });
 
 module.exports = User;

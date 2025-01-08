@@ -82,7 +82,15 @@ const createUser = async (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: '1h' } // Token expires in 1 hour
       );
-  
+
+      res.cookie("token", token, {
+        httpOnly: true,        // Prevent JavaScript access
+        secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+        sameSite: "strict",    // Prevent cross-site request forgery (CSRF) attacks
+        maxAge: 1 * 60 * 60 * 1000, // 1 hour
+      });
+      
+      
       // Send back user details with token
       res.status(200).json({
         id: user.userId,
@@ -135,6 +143,14 @@ const createUser = async (req, res) => {
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
       );
+
+
+      res.cookie("token", token, {
+        httpOnly: true,        // Prevent JavaScript access
+        secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+        sameSite: "strict",    // Prevent cross-site request forgery (CSRF) attacks
+        maxAge: 1 * 60 * 60 * 1000, // 1 hour
+      });
   
     
       res.status(200).json({
@@ -366,22 +382,35 @@ const saveProfilePic = async (req, res) => {
     const { userId, base64Image } = req.body;
 
     if (!userId || !base64Image) {
-        return res.status(400).json({ message: "User ID and base64 image are required." });
+      return res.status(400).json({ message: "User ID and base64 image are required." });
     }
 
-
+    // Extract the format from the base64 metadata
+    const formatMatch = base64Image.match(/^data:image\/(\w+);base64,/);
+    if (!formatMatch) {
+      return res.status(400).json({ message: "Invalid image format." });
+    }
+    const imageFormat = formatMatch[1]; // Extract format (e.g., png, jpeg)
     const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, ""); // Remove Base64 metadata
+
     const imageBuffer = Buffer.from(base64Data, "base64"); // Decode Base64 to binary
 
+    // Update the user's profile picture and format in the database
     await User.update(
-        { profilePicture: imageBuffer },
-        { where: { userId } }
+      { profilePicture: imageBuffer, profilePictureFormat: imageFormat },
+      { where: { userId } }
     );
 
     res.status(200).json({ message: "Profile picture updated successfully." });
-} catch (error) {
+  } catch (error) {
     res.status(500).json({ error: error.message });
-}
+  }
+};
+
+
+const logoutUser = async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 
@@ -389,4 +418,4 @@ const saveProfilePic = async (req, res) => {
 
 
 
-module.exports = {saveProfilePic,resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
+module.exports = {logoutUser,saveProfilePic,resetPassword,sendRecoveryCode,deleteUser, createUser, getUsers ,loginUser ,createSurvey ,getUserById ,updateUserById,getSurveyById,getAllSurveys,createNewUser,googleLogin};
