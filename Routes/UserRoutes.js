@@ -39,6 +39,6 @@ router.put('/update/:userId', authMiddleware, updateUserById); // Requires auth
 router.get('/survey/:userId', authMiddleware, getSurveyById); // Requires auth
 router.get("/surveys/getAll", authMiddleware, getAllSurveys); // Requires auth
 router.delete("/delete/:id", authMiddleware, deleteUser); // Requires auth
-router.post('/profilePicSave', authMiddleware, upload.single('profilePic'), saveProfilePic); // Requires auth
+router.post('/profilePicSave', authMiddleware, saveProfilePic); // Requires auth
 router.post('/logoutUser', authMiddleware, logoutUser); // Requires auth
 module.exports = router;
