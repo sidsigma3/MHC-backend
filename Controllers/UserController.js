@@ -88,6 +88,8 @@ const createUser = async (req, res) => {
         secure: false, // Use HTTPS in production
         sameSite: "none",    // Prevent cross-site request forgery (CSRF) attacks
         maxAge: 1 * 60 * 60 * 1000, // 1 hour
+        domain: 'localhost', // Optional: For subdomains
+        path: '/' // Optional: Default, accessible to all paths
       });
       
       
@@ -150,6 +152,8 @@ const createUser = async (req, res) => {
         secure: false, // Use HTTPS in production
         sameSite: "none",  
         maxAge: 1 * 60 * 60 * 1000, // 1 hour
+        domain: 'localhost', // Optional: For subdomains
+        path: '/' // Optional: Default, accessible to all paths
       });
   
       
