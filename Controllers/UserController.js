@@ -149,7 +149,7 @@ const createUser = async (req, res) => {
 
       res.cookie("token", jwtToken, {
         httpOnly: true,        // Prevent JavaScript access
-        secure: false, // Use HTTPS in production
+        secure: true, // Use HTTPS in production
         sameSite:"none"
       });
   
