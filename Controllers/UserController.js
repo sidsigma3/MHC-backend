@@ -84,12 +84,9 @@ const createUser = async (req, res) => {
       );
 
       res.cookie("token", token, {
-        httpOnly: true,        // Prevent JavaScript access
-        secure: false, // Use HTTPS in production
-        sameSite: "none",    // Prevent cross-site request forgery (CSRF) attacks
-        maxAge: 1 * 60 * 60 * 1000, // 1 hour
-        domain: 'localhost', // Optional: For subdomains
-        path: '/' // Optional: Default, accessible to all paths
+        httpOnly: true,       
+        secure: true,
+        sameSite: "none",   
       });
       
       
