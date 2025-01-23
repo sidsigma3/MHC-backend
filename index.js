@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://www.stockangel.online','https://www.mediprobehealthcare.life'], 
+  origin: ['http://localhost:3000','https://www.mediprobehealthcare.life'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE','OPTIONS'], 
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 
 
-// Authentication middleware (applied to all routes after sessions)
+
 
 
 // Routes
